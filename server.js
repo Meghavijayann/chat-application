@@ -1,22 +1,30 @@
-import http from 'http';
-import {Server} from 'socket.io';
-import express from 'express';
 import cors from 'cors';
- 
+import express from 'express';
+import http from 'http';
+import { Server } from 'socket.io';
 
-const app=express();
-app.use(cors());
+const app = express();
+app.use(cors({
+  origin: '*'  // ⚠️ For now, allow all origins. You can restrict it later.
+}));
+
 const server = http.createServer(app);
-const io= new Server(server,{
-    cors:{
-        origin:"http://localhost:5180",
-        methods:["GET","POST"]
-    }
+
+const io = new Server(server, {
+  cors: {
+    origin: '*',  // Make sure your Netlify domain is allowed here
+    methods: ['GET', 'POST']
+  }
 });
-io.on('connection',(socket)=>{
-    console.log('New client connected');
-    socket.on('chat message', (msg)=>{
-        io.emit('chat message', msg);
-       });
+
+io.on('connection', (socket) => {
+  console.log('New client connected');
+  socket.on('chat message', (msg) => {
+    io.emit('chat message', msg);
+  });
 });
-server.listen(3000,()=>console.log('Server running on 3000'));
+
+const PORT = process.env.PORT || 3000;
+server.listen(PORT, () => {
+  console.log(`Server running on ${PORT}`);
+});
