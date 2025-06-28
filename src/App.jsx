@@ -1,6 +1,6 @@
 import React, {useEffect,useState,useRef } from 'react'
 import {io} from 'socket.io-client'
-const socket=io('http://localhost:3000')
+const socket = io('https://chat-application-1-r1k7.onrender.com');
 import './App.css';
 function App() {
   const [messages,setMessages]=useState([]);
